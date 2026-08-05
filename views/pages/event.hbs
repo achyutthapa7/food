@@ -1,0 +1,165 @@
+<div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+    <div>
+        <h3 class="mb-0">{{event.title}}</h3>
+        <div class="text-muted">{{formatDate event.event_date}}{{#if event.description}} · {{event.description}}{{/if}}</div>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="/events/{{event.id}}/export" class="btn btn-outline-success">
+            <i class="bi bi-file-earmark-excel me-1"></i>Export Excel
+        </a>
+        <button class="btn btn-outline-secondary" onclick="window.print()">
+            <i class="bi bi-printer me-1"></i>Print Report
+        </button>
+    </div>
+</div>
+
+<!-- Add Order -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="card-title mb-3"><i class="bi bi-plus-circle me-2"></i>Add Order</h5>
+        <form id="addOrderForm" data-event-id="{{event.id}}" class="row g-3 align-items-end">
+            <div class="col-12 col-md-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" id="orderVisitorName" readonly>
+            </div>
+            <div class="col-6 col-md-2">
+                <label class="form-label">Group</label>
+                <select class="form-select" id="orderGroup" name="group_no" required>
+                    <option value="1">Group 1</option>
+                    <option value="2">Group 2</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-4">
+                <label class="form-label">Food Item</label>
+                <select class="form-select" id="orderMenuItem" name="menu_item_id" required>
+                    <option value="">-- Search food --</option>
+                    {{#each menu}}
+                    <optgroup label="{{this.category}}">
+                        {{#each this.items}}
+                        <option value="{{this.id}}" data-price="{{this.price}}">{{this.display_name}} — Rs {{this.price}}</option>
+                        {{/each}}
+                    </optgroup>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="col-6 col-md-1">
+                <label class="form-label">Price</label>
+                <input type="text" class="form-control" id="orderPrice" readonly>
+            </div>
+            <div class="col-6 col-md-1">
+                <label class="form-label">Eligible</label>
+                <input type="text" class="form-control" id="orderEligible" readonly>
+            </div>
+            <div class="col-6 col-md-1">
+                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-save"></i></button>
+            </div>
+        </form>
+        <div id="addOrderError" class="text-danger small mt-2 d-none"></div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <form class="row g-2 align-items-end" method="GET">
+            <div class="col-6 col-md-3">
+                <label class="form-label small">Search Name</label>
+                <input type="text" name="name" class="form-control form-control-sm" value="{{filters.name}}" placeholder="Participant name">
+            </div>
+            <div class="col-6 col-md-3">
+                <label class="form-label small">Search Food</label>
+                <input type="text" name="food" class="form-control form-control-sm" value="{{filters.food}}" placeholder="Food item">
+            </div>
+            <div class="col-6 col-md-2">
+                <label class="form-label small">Group</label>
+                <select name="group" class="form-select form-select-sm">
+                    <option value="">All</option>
+                    <option value="1" {{#if (eq filters.group "1")}}selected{{/if}}>Group 1</option>
+                    <option value="2" {{#if (eq filters.group "2")}}selected{{/if}}>Group 2</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-2">
+                <button type="submit" class="btn btn-sm btn-outline-primary w-100"><i class="bi bi-funnel me-1"></i>Filter</button>
+            </div>
+            <div class="col-6 col-md-2">
+                <a href="/events/{{event.id}}" class="btn btn-sm btn-outline-secondary w-100">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Orders Table -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>S.N.</th>
+                        <th>Name</th>
+                        <th>Group</th>
+                        <th>Food Item</th>
+                        <th>Price</th>
+                        <th>Eligible</th>
+                        <th>Created Time</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    {{#each orders}}
+                    <tr data-order-id="{{this.id}}">
+                        <td>{{inc @index}}</td>
+                        <td>{{this.visitor_name}}</td>
+                        <td><span class="badge {{#if (eq this.group_no 1)}}text-bg-info{{else}}text-bg-warning{{/if}}">Group {{this.group_no}}</span></td>
+                        <td>{{this.display_name}}</td>
+                        <td>Rs {{formatMoney this.actual_price}}</td>
+                        <td>Rs {{formatMoney this.eligible_price}}</td>
+                        <td>{{formatTime this.created_at}}</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-danger delete-order-btn" data-order-id="{{this.id}}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {{else}}
+                    <tr><td colspan="8" class="text-center text-muted py-4">No orders yet.</td></tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Summary -->
+<div class="row g-3">
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <span class="badge text-bg-info mb-2">Group 1</span>
+                <div>Participants: <strong>{{group1Summary.participants}}</strong></div>
+                <div>Actual: <strong>Rs {{formatMoney group1Summary.total_actual}}</strong></div>
+                <div>Eligible: <strong>Rs {{formatMoney group1Summary.total_eligible}}</strong></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <span class="badge text-bg-warning mb-2">Group 2</span>
+                <div>Participants: <strong>{{group2Summary.participants}}</strong></div>
+                <div>Actual: <strong>Rs {{formatMoney group2Summary.total_actual}}</strong></div>
+                <div>Eligible: <strong>Rs {{formatMoney group2Summary.total_eligible}}</strong></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm h-100 border-success">
+            <div class="card-body">
+                <span class="badge text-bg-success mb-2">Event Summary</span>
+                <div>Participants: <strong>{{eventSummary.participants}}</strong></div>
+                <div>Actual: <strong>Rs {{formatMoney eventSummary.total_actual}}</strong></div>
+                <div>Eligible: <strong>Rs {{formatMoney eventSummary.total_eligible}}</strong></div>
+            </div>
+        </div>
+    </div>
+</div>

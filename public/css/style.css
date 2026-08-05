@@ -1,0 +1,53 @@
+body {
+    background-color: #f5f6f8;
+}
+
+.welcome-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(13, 27, 42, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.welcome-card {
+    width: 90%;
+    max-width: 420px;
+    border: none;
+    border-radius: 1rem;
+}
+
+.stat-box {
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #212529;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.event-card, .dashboard-card {
+    transition: box-shadow 0.15s ease;
+}
+
+.event-card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1) !important;
+}
+
+.visitor-greeting {
+    font-weight: 500;
+}
+
+@media print {
+    .navbar, form, .btn, #addOrderForm, .card form { display: none !important; }
+}

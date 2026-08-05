@@ -1,0 +1,18 @@
+{
+  "name": "food-order-system",
+  "version": "1.0.0",
+  "description": "Local office food ordering and reimbursement management system",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "seed": "node database/seed.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "body-parser": "^1.20.2",
+    "exceljs": "^4.4.0",
+    "express": "^4.19.2",
+    "express-handlebars": "^7.1.3",
+    "method-override": "^3.0.0"
+  }
+}

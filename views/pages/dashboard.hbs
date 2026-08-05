@@ -1,0 +1,81 @@
+<h3 class="mb-4">Dashboard</h3>
+
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-primary">
+            <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <div class="text-muted small">Today's Event</div>
+                    <h5 class="mb-0">{{todayEvent.title}} <span class="text-muted small">({{formatDate todayEvent.event_date}})</span></h5>
+                </div>
+                <a href="/events/{{todayEvent.id}}" class="btn btn-primary btn-sm">Open Event</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-4">
+        <div class="card dashboard-card shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge text-bg-info">Group 1</span>
+                    <i class="bi bi-people fs-4 text-info"></i>
+                </div>
+                <div class="stat-value">Rs {{formatMoney group1Summary.total_actual}}</div>
+                <div class="stat-label">Eligible: Rs {{formatMoney group1Summary.total_eligible}} · {{group1Summary.participants}} people</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card dashboard-card shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge text-bg-warning">Group 2</span>
+                    <i class="bi bi-people fs-4 text-warning"></i>
+                </div>
+                <div class="stat-value">Rs {{formatMoney group2Summary.total_actual}}</div>
+                <div class="stat-label">Eligible: Rs {{formatMoney group2Summary.total_eligible}} · {{group2Summary.participants}} people</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card dashboard-card shadow-sm h-100 border-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge text-bg-success">Grand Total</span>
+                    <i class="bi bi-cash-stack fs-4 text-success"></i>
+                </div>
+                <div class="stat-value">Rs {{formatMoney eventSummary.total_actual}}</div>
+                <div class="stat-label">Eligible: Rs {{formatMoney eventSummary.total_eligible}} · {{eventSummary.participants}} people</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm h-100 text-center">
+            <div class="card-body">
+                <div class="stat-value">{{eventSummary.participants}}</div>
+                <div class="stat-label">Total Participants</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm h-100 text-center">
+            <div class="card-body">
+                <div class="stat-value">Rs {{formatMoney eventSummary.total_actual}}</div>
+                <div class="stat-label">Total Actual Amount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm h-100 text-center">
+            <div class="card-body">
+                <div class="stat-value">Rs {{formatMoney eventSummary.total_eligible}}</div>
+                <div class="stat-label">Total Eligible Amount</div>
+            </div>
+        </div>
+    </div>
+</div>
